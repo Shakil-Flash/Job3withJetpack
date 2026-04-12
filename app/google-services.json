@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299806461629",
+    "project_id": "job3withjetpack",
+    "storage_bucket": "job3withjetpack.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299806461629:android:4918792f0bf2ba9154b1d4",
+        "android_client_info": {
+          "package_name": "com.flash.job3withjetpack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAigfWz7Te2Y2E6xZGLiC6OgsIBMpkF9bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

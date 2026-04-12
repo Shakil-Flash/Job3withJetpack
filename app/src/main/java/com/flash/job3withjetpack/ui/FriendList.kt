@@ -35,31 +35,23 @@ import androidx.compose.foundation.lazy.items
 fun FriendScreen() {
 
     val myUser = User(
-        name = "Flash",
+        userName = "Flash",
         email = "flash@email.com",
-        lat = "10",
-        lng = "01"
+        lat = 10.0,
+        lng = 01.0
     )
 
     val friends = listOf(
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122"),
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122"),
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122"),
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122"),
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122"),
-        User("Batman", "batman@email.com", "40", "74"),
-        User("Superman", "super@email.com", "34", "118"),
-        User("Ironman", "iron@email.com", "37", "122")
+        User("1","Batman", "batman@email.com", 40.0, 20.0),
+        User("2","Superman", "super@email.com", 34.0, 118.0),
+        User("3","Ironman", "iron@email.com", 55.0, 122.037),
+        User("4","Batman", "batman@email.com", 40.0, 74.0),
+        User("5","Superman", "super@email.com", 55.0, 122.037),
+        User("6","Ironman", "iron@email.com", 55.0, 122.037),
+        User("7","Batman", "batman@email.com", 55.0, 122.037),
+        User("8","Superman", "super@email.com", 55.0, 122.037),
+        User("9","Ironman", "iron@email.com", 55.0, 122.037),
+        User("10","Batman", "batman@email.com", 55.0, 122.037)
     )
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -91,7 +83,7 @@ fun FriendItem(user: User) {
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            Text(text = user.name, fontSize = 18.sp)
+            Text(text = user.userName, fontSize = 18.sp)
             Text(text = user.email, fontSize = 14.sp, color = Color.Gray)
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -131,7 +123,7 @@ fun MyProfileCard(user: User) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(text = user.name, fontSize = 18.sp)
+            Text(text = user.userName, fontSize = 18.sp)
             Text(text = user.email, fontSize = 14.sp, color = Color.Gray)
 
             Spacer(modifier = Modifier.height(10.dp))

@@ -1,8 +1,9 @@
 package com.flash.job3withjetpack.data
 
 data class User(
-    val name: String,
-    val email: String,
-    val lat: String,
-    val lng: String
+    val userId: String = "",
+    val email: String = "",
+    val userName: String = "",
+    val lat: Double? = null,
+    val lng: Double? = null
 )
