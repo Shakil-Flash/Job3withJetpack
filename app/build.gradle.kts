@@ -63,4 +63,9 @@ dependencies {
 
     val lifecycle_version = "2.8.7" // Use the latest stable version
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+    implementation("com.google.maps.android:maps-compose:8.3.0")
+    // Optional: For utilities like clustering
+    implementation("com.google.maps.android:maps-compose-utils:8.3.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }

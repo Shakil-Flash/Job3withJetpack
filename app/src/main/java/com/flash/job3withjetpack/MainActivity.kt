@@ -16,7 +16,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.flash.job3withjetpack.ui.LoginScreen
+import com.flash.job3withjetpack.ui.ShareLocation
+import com.flash.job3withjetpack.ui.MapScreen
+import com.flash.job3withjetpack.ui.FriendScreen
 import com.flash.job3withjetpack.ui.theme.Job3withJetpackTheme
+import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +29,36 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var isLoggedIn by remember {
-                mutableStateOf(com.google.firebase.auth.FirebaseAuth.getInstance().currentUser != null)
+                mutableStateOf(FirebaseAuth.getInstance().currentUser != null)
             }
+            var currentScreen by remember { mutableStateOf("friends") }
+            var selectedLocation by remember { mutableStateOf<LatLng?>(null) }
+            var selectedUserName by remember { mutableStateOf<String?>(null) }
+
             Job3withJetpackTheme {
                 if (!isLoggedIn) {
                     LoginScreen(onLoginSuccess = { isLoggedIn = true })
                 } else {
-                    com.flash.job3withjetpack.ui.FriendScreen()
+                    when (currentScreen) {
+                        "friends" -> FriendScreen(
+                            onGetLocationClick = {
+                                currentScreen = "share"
+                            },
+                            onFriendClick = { lat, lng, name ->
+                                selectedLocation = LatLng(lat, lng)
+                                selectedUserName = name
+                                currentScreen = "map"
+                            }
+                        )
+                        "share" -> ShareLocation(onShowMap = { lat, lng ->
+                            selectedLocation = LatLng(lat, lng)
+                            selectedUserName = "My Location"
+                            currentScreen = "map"
+                        })
+                        "map" -> MapScreen(selectedLocation, selectedUserName, onBack = {
+                            currentScreen = "friends"
+                        })
+                    }
                 }
             }
         }

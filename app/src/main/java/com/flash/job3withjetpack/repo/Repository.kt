@@ -43,6 +43,32 @@ class Repository {
             }
     }
 
+    fun getAllUsers(onComplete: (List<User>) -> Unit) {
+
+        db.collection("users").get()
+            .addOnSuccessListener { snapshot ->
+                val list = snapshot.documents.mapNotNull { doc ->
+                    doc.toObject(User::class.java)
+                }
+                onComplete(list)
+            }
+            .addOnFailureListener {
+                onComplete(emptyList())
+            }
+
+    }
+
     fun currentUserId(): String? = auth.currentUser?.uid
+
+    fun updateUserLocation(lat: Double, lng: Double, onComplete: (Boolean, String?) -> Unit) {
+        val userId = currentUserId() ?: return onComplete(false, "User not logged in")
+        db.collection("users").document(userId)
+            .update(mapOf(
+                "lat" to lat,
+                "lng" to lng
+            ))
+            .addOnSuccessListener { onComplete(true, "Location Updated") }
+            .addOnFailureListener { e -> onComplete(false, e.localizedMessage) }
+    }
 
 }

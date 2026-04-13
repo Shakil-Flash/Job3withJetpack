@@ -31,54 +31,78 @@ import com.flash.job3withjetpack.data.User
 import androidx.compose.foundation.lazy.items
 
 
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.filled.AddLocation
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+
+
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.flash.job3withjetpack.repo.Repository
+import com.flash.job3withjetpack.viewmodels.UserViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+
+
 @Composable
-fun FriendScreen() {
+fun FriendScreen(
+    onGetLocationClick: () -> Unit,
+    onFriendClick: (Double, Double, String) -> Unit,
+    viewModel: UserViewModel = viewModel(factory = UserViewModelFactory(Repository()))
+) {
+    val currentUser by viewModel.currentUser.observeAsState()
+    val friends by viewModel.users.observeAsState(emptyList())
 
-    val myUser = User(
-        userName = "Flash",
-        email = "flash@email.com",
-        lat = 10.0,
-        lng = 01.0
-    )
+    LaunchedEffect(Unit) {
+        viewModel.fetchUsers()
+    }
 
-    val friends = listOf(
-        User("1","Batman", "batman@email.com", 40.0, 20.0),
-        User("2","Superman", "super@email.com", 34.0, 118.0),
-        User("3","Ironman", "iron@email.com", 55.0, 122.037),
-        User("4","Batman", "batman@email.com", 40.0, 74.0),
-        User("5","Superman", "super@email.com", 55.0, 122.037),
-        User("6","Ironman", "iron@email.com", 55.0, 122.037),
-        User("7","Batman", "batman@email.com", 55.0, 122.037),
-        User("8","Superman", "super@email.com", 55.0, 122.037),
-        User("9","Ironman", "iron@email.com", 55.0, 122.037),
-        User("10","Batman", "batman@email.com", 55.0, 122.037)
-    )
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onGetLocationClick) {
+                Icon(Icons.Default.AddLocation, contentDescription = "Get Location")
+            }
+        }
+    ) { paddingValues ->
+        Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+            // 🔹 My Profile (TOP FIXED)
+            currentUser?.let { user ->
+                MyProfileCard(user = user, onClick = {
+                    if (user.lat != null && user.lng != null) {
+                        onFriendClick(user.lat, user.lng, user.userName)
+                    }
+                })
+            }
 
-        // 🔹 My Profile (TOP FIXED)
-        MyProfileCard(user = myUser)
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 🔹 Friends List (BOTTOM SCROLLABLE)
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(friends) { user ->
-                FriendItem(user)
+            // 🔹 Friends List (BOTTOM SCROLLABLE)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(friends) { user ->
+                    FriendItem(user, onClick = {
+                        if (user.lat != null && user.lng != null) {
+                            onFriendClick(user.lat, user.lng, user.userName)
+                        }
+                    })
+                }
             }
         }
     }
-
 }
+
 @Composable
-fun FriendItem(user: User) {
+fun FriendItem(user: User, onClick: () -> Unit) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clickable { onClick() }
     ) {
 
         Column(modifier = Modifier.padding(16.dp)) {
@@ -100,13 +124,14 @@ fun FriendItem(user: User) {
 }
 
 @Composable
-fun MyProfileCard(user: User) {
+fun MyProfileCard(user: User, onClick: () -> Unit) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .height(170.dp)
+            .clickable { onClick() }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -142,6 +167,6 @@ fun MyProfileCard(user: User) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewFriendList() {
-    FriendScreen()
+    FriendScreen(onGetLocationClick = {}, onFriendClick = { _, _, _ -> })
 }
 
