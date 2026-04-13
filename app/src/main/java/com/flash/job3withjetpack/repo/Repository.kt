@@ -20,27 +20,26 @@ class Repository {
                     userName = userName,
                     email = email
                 )
-
                 db.collection("users").document(userId).set(user)
                     .addOnSuccessListener {
-                        onComplete(true,null)
+                        onComplete(true, "Registration Successful")
                     }
                     .addOnFailureListener { e ->
-                        onComplete(false, null)
+                        onComplete(false, "Firestore Error: ${e.localizedMessage}")
                     }
             }
             .addOnFailureListener { e ->
-                onComplete(false, e.message)
+                onComplete(false, "Auth Error: ${e.localizedMessage}")
             }
     }
 
     fun loginUser(email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
-                onComplete(true, null)
+                onComplete(true, "Welcome back!")
             }
             .addOnFailureListener { e ->
-                onComplete(false, e.message)
+                onComplete(false, "Login Error: ${e.localizedMessage}")
             }
     }
 

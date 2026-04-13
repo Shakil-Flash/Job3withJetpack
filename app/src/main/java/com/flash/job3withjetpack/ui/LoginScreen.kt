@@ -44,9 +44,10 @@ import com.flash.job3withjetpack.ui.AuthViewModelFactory
 @Composable
 fun LoginScreen(
     // In LoginScreen.kt
-    viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(Repository()))
+    viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(Repository())),
+    onLoginSuccess: () -> Unit // Add a callback for navigation
 ) {
-
+    val content = androidx.compose.ui.platform.LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -59,9 +60,10 @@ fun LoginScreen(
         loginResult?.let { (success, message) ->
             if (success) {
                 // Navigate to another screen
+                onLoginSuccess()
             } else {
                 // Show error message
-
+                android.widget.Toast.makeText(content, "Login Failed: $message", android.widget.Toast.LENGTH_LONG).show()
 
             }
         }
@@ -70,9 +72,10 @@ fun LoginScreen(
     LaunchedEffect(registerResult) {
         registerResult?.let { (success, message) ->
             if (success) {
-                // Navigate to another screen
+                android.widget.Toast.makeText(content, "Registration Successful!", android.widget.Toast.LENGTH_LONG).show()
+                onLoginSuccess() // This triggers the navigation to FriendList
             } else {
-                // Show error message
+                android.widget.Toast.makeText(content, "Error: $message", android.widget.Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -145,8 +148,12 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    if (email.isNotEmpty() && password.isNotEmpty()) {
-                        viewModel.login(email, password)
+                    val trimmedEmail = email.trim()
+                    val trimmedPassword = password.trim()
+                    if (trimmedEmail.isNotEmpty() && trimmedPassword.isNotEmpty()) {
+                        viewModel.login(trimmedEmail, trimmedPassword)
+                    } else {
+                        android.widget.Toast.makeText(content, "Please fill in all fields", android.widget.Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
@@ -162,8 +169,12 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    if(email.isNotEmpty() && password.isNotEmpty()) {
-                        viewModel.register(email, password)
+                    val trimmedEmail = email.trim()
+                    val trimmedPassword = password.trim()
+                    if(trimmedEmail.isNotEmpty() && trimmedPassword.isNotEmpty()) {
+                        viewModel.register(trimmedEmail, trimmedPassword)
+                    } else {
+                        android.widget.Toast.makeText(content, "Please fill in all fields", android.widget.Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -183,5 +194,7 @@ fun LoginScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewLoginScreen() {
-    LoginScreen()
+    LoginScreen(
+        onLoginSuccess = {}
+    )
 }

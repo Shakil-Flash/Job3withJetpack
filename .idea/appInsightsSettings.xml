@@ -6,14 +6,6 @@
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
-              <option name="connection">
-                <ConnectionSetting>
-                  <option name="appId" value="com.flash.job3withjetpack" />
-                  <option name="mobileSdkAppId" value="1:299806461629:android:4918792f0bf2ba9154b1d4" />
-                  <option name="projectId" value="job3withjetpack" />
-                  <option name="projectNumber" value="299806461629" />
-                </ConnectionSetting>
-              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="THIRTY_DAYS" />
               <option name="visibilityType" value="ALL" />
