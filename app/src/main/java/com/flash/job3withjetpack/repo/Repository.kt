@@ -43,6 +43,10 @@ class Repository {
             }
     }
 
+    fun logoutUser() {
+        auth.signOut()
+    }
+
     fun getAllUsers(onComplete: (List<User>) -> Unit) {
 
         db.collection("users").get()

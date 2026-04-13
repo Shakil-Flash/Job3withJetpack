@@ -46,10 +46,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 
 
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material3.FabPosition
+
+
 @Composable
 fun FriendScreen(
     onGetLocationClick: () -> Unit,
     onFriendClick: (Double, Double, String) -> Unit,
+    onLogout: () -> Unit,
     viewModel: UserViewModel = viewModel(factory = UserViewModelFactory(Repository()))
 ) {
     val currentUser by viewModel.currentUser.observeAsState()
@@ -61,10 +66,26 @@ fun FriendScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = onGetLocationClick) {
-                Icon(Icons.Default.AddLocation, contentDescription = "Get Location")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                FloatingActionButton(
+                    onClick = onLogout,
+                    containerColor = Color.Red,
+                    contentColor = Color.White
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Logout")
+                }
+
+                FloatingActionButton(onClick = onGetLocationClick) {
+                    Icon(Icons.Default.AddLocation, contentDescription = "Get Location")
+                }
             }
-        }
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
 
@@ -167,6 +188,6 @@ fun MyProfileCard(user: User, onClick: () -> Unit) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewFriendList() {
-    FriendScreen(onGetLocationClick = {}, onFriendClick = { _, _, _ -> })
+    FriendScreen(onGetLocationClick = {}, onFriendClick = { _, _, _ -> }, onLogout = {})
 }
 

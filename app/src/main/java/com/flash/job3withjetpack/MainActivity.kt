@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.flash.job3withjetpack.repo.Repository
 import com.flash.job3withjetpack.ui.LoginScreen
 import com.flash.job3withjetpack.ui.ShareLocation
 import com.flash.job3withjetpack.ui.MapScreen
@@ -37,7 +38,10 @@ class MainActivity : ComponentActivity() {
 
             Job3withJetpackTheme {
                 if (!isLoggedIn) {
-                    LoginScreen(onLoginSuccess = { isLoggedIn = true })
+                    LoginScreen(onLoginSuccess = { 
+                        isLoggedIn = true 
+                        currentScreen = "friends"
+                    })
                 } else {
                     when (currentScreen) {
                         "friends" -> FriendScreen(
@@ -48,11 +52,15 @@ class MainActivity : ComponentActivity() {
                                 selectedLocation = LatLng(lat, lng)
                                 selectedUserName = name
                                 currentScreen = "map"
+                            },
+                            onLogout = {
+                                Repository().logoutUser()
+                                isLoggedIn = false
                             }
                         )
-                        "share" -> ShareLocation(onShowMap = { lat, lng ->
+                        "share" -> ShareLocation(onShowMap = { lat, lng, name ->
                             selectedLocation = LatLng(lat, lng)
-                            selectedUserName = "My Location"
+                            selectedUserName = name
                             currentScreen = "map"
                         })
                         "map" -> MapScreen(selectedLocation, selectedUserName, onBack = {
